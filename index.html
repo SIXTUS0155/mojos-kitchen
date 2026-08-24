@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOJO'S Kitchen</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      color: #222;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    header p {
+      margin-bottom: 0;
+    }
+
+    .menu {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .menu h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .food {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    .food h3 {
+      margin-top: 0;
+    }
+
+    .price {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      background: #111;
+      color: white;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: #111;
+      color: white;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🍽️ MOJO'S Kitchen</h1>
+    <p>Delicious food delivered in Abuja</p>
+  </header>
+
+  <section class="menu">
+    <h2>Our Menu</h2>
+
+    <div class="food">
+      <h3>🍚 Jollof Rice</h3>
+      <p class="price">₦3,000</p>
+      <button>Add to Cart</button>
+    </div>
+
+    <div class="food">
+      <h3>🍛 Fried Rice</h3>
+      <p class="price">₦3,500</p>
+      <button>Add to Cart</button>
+    </div>
+
+    <div class="food">
+      <h3>🍗 Chicken</h3>
+      <p class="price">₦2,500</p>
+      <button>Add to Cart</button>
+    </div>
+
+    <div class="food">
+      <h3>🍔 Burger</h3>
+      <p class="price">₦4,000</p>
+      <button>Add to Cart</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>📍 Abuja, Nigeria</p>
+</>
+  </footer>
+<div id="cart" style="
+  background:white;
+  padding:20px;
+  margin:20px;
+  border-radius:15px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+">
+  <h2>🛒 Your Cart</h2>
+  <div id="cartItems">Your cart is empty.</div>
+  <h3>Total: ₦<span id="total">0</span></h3>
+</div>
+<div style="
+  background:white;
+  padding:20px;
+  margin:20px;
+  border-radius:15px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+">
+  <h2>📝 Checkout</h2>
+
+  <input
+    id="customerName"
+    type="text"
+    placeholder="Full Name"
+    style="width:100%;padding:14px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;"
+  >
+
+  <input
+    id="customerPhone"
+    type="tel"
+    placeholder="Phone Number"
+    style="width:100%;padding:14px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;"
+  >
+
+  <textarea
+    id="customerAddress"
+    placeholder="Delivery Address in Abuja"
+    style="width:100%;padding:14px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;"
+  ></textarea>
+
+  <button onclick="placeOrder()">
+  Place Order
+</button>
+
+<a
+  href="https://wa.me/2349116951595"
+  target="_blank"
+  style="
+    display:block;
+    text-align:center;
+    background:#25D366;
+    color:white;
+    padding:14px;
+    margin-top:10px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+  "
+>
+  💬 Order on WhatsApp
+</a>
+
+  <p id="orderMessage"></p>
+</div>
+<script>
+  let cart = [];
+  let total = 0;
+
+  const buttons = document.querySelectorAll(".food button");
+
+  buttons.forEach(button => {
+    button.addEventListener("click", function () {
+      const food = this.parentElement;
+      const name = food.querySelector("h3").textContent;
+      const priceText = food.querySelector(".price").textContent;
+      const price = Number(priceText.replace(/[₦,]/g, ""));
+
+      cart.push({ name, price });
+      total += price;
+
+      showCart();
+    });
+  });
+
+  function showCart() {
+    const cartItems = document.getElementById("cartItems");
+
+    cartItems.innerHTML = "";
+
+    cart.forEach((item, index) => {
+      cartItems.innerHTML += `
+        <p>
+          ${item.name} — ₦${item.price.toLocaleString()}
+          <button onclick="removeItem(${index})"
+          style="width:auto;padding:7px;margin-left:10px;">
+          Remove
+          </button>
+        </p>
+      `;
+    });
+
+    document.getElementById("total").textContent =
+      total.toLocaleString();
+  }
+
+  function removeItem(index) {
+    total -= cart[index].price;
+    cart.splice(index, 1);
+    showCart();
+  }function placeOrder() {
+  const name = document.getElementById("customerName").value;
+  const phone = document.getElementById("customerPhone").value;
+  const address = document.getElementById("customerAddress").value;
+  const message = document.getElementById("orderMessage");
+
+  if (cart.length === 0) {
+    message.textContent = "Please add food to your cart first.";
+    return;
+  }
+
+  if (!name || !phone || !address) {
+    message.textContent = "Please fill in all your delivery details.";
+    return;
+  }
+
+  const orderItems = cart.map(item =>
+  `${item.name} - ₦${item.price.toLocaleString()}`
+).join("\n");
+
+const whatsappMessage =
+  `Hello MOJO'S Kitchen!%0A%0A` +
+  `New Order:%0A${orderItems}%0A%0A` +
+  `Total: ₦${total.toLocaleString()}%0A%0A` +
+  `Customer: ${name}%0A` +
+  `Phone: ${phone}%0A` +
+  `Address: ${address}`;
+
+const whatsappURL = "https://wa.me/2349116951595?text=" + encodeURIComponent(whatsappMessage);
+
+window.location.href = whatsappURL;
+  }
+    </script>
+</body>
+</html>
